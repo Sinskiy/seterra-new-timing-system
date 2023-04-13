@@ -1,4 +1,4 @@
-# Seterra bruteforce 100% chance
+# Seterra new timing system
 Extension for [Seterra](https://www.geoguessr.com/seterra/) that shows milliseconds on the screen
 # Installation
 1. [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
