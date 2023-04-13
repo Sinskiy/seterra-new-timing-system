@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Seterra new timing system with showing milliseconds on top timer
+// @name         Seterra new timing system
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  milliseconds on the screen
@@ -38,7 +38,7 @@ function startTime() {
 }
 
 function timerTime(ms) {
-  if (ms < 0) return "000ms";
+  if (ms < 0) return "0.0s";
   const hours = parseInt(Math.floor(ms / 36000));
   let remainder = ms % 36000;
   const minutes = parseInt(Math.floor(remainder / 600));
@@ -51,7 +51,7 @@ function timerTime(ms) {
   }
   return `${hours > 0 ? `${hours}h ` : ""} ${
     minutes > 0 ? `${minutes}m ` : ""
-  } ${seconds > 0 ? `${seconds}s` : ""} ${remainder}00ms`;
+  } ${`${seconds}.${remainder}s`}`;
 }
 
 function restartMouse() {
