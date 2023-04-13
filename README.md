@@ -3,5 +3,7 @@ Extension for [Seterra](https://www.geoguessr.com/seterra/) that shows milliseco
 # Installation
 1. [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
 2. [Script](https://github.com/Sinskiy/seterra-new-timing-system/raw/main/download.user.js)
+3. [Script (version with showing milliseconds until yoг complete the quiz. quite annoying)](https://github.com/Sinskiy/seterra-new-timing-system/raw/main/download2.user.js
+)
 ---
 [Inspiration](https://github.com/dphdmn)
