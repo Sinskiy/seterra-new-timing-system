@@ -39,7 +39,6 @@ function startTime() {
 
 function timerTime(ms) {
   if (ms < 0) return "000ms";
-  console.log(ms);
   const hours = parseInt(Math.floor(ms / 36000));
   let remainder = ms % 36000;
   const minutes = parseInt(Math.floor(remainder / 600));
