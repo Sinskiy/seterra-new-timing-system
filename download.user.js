@@ -8,6 +8,7 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=geoguessr.com
 // @grant        none
 // ==/UserScript==
+
 document.getElementById("timer").setAttribute("id", "overrideTimer");
 const timer = document.getElementById("overrideTimer");
 timer.innerHTML = "please, restart";
@@ -19,24 +20,25 @@ score.style.fontSize = "35px";
 let time = 0;
 let timerCount;
 let restarted = false;
+
 function startTime() {
   clearInterval(timerCount);
   completion.style.display = "none";
   time = -2;
   timerCount = setInterval(() => {
     time += 0.5;
-    timer.innerHTML = `| ${timerTime(time, false)}`;
+    timer.innerHTML = `| ${timerTime(time)}`;
     if (completion.style.display === "block") {
       clearInterval(timerCount);
       score.innerHTML =
-        document.getElementById("score").innerHTML + timerTime(time, true);
+        document.getElementById("score").innerHTML + timer.innerHTML.slice(2);
       time = 0;
     }
   }, 50);
 }
-function timerTime(ms, msVisible) {
-  if (msVisible === false && ms < 10) return "0s";
-  else if (ms < 0) return "000ms";
+
+function timerTime(ms) {
+  if (ms < 0) return "000ms";
   console.log(ms);
   const hours = parseInt(Math.floor(ms / 36000));
   let remainder = ms % 36000;
@@ -48,19 +50,17 @@ function timerTime(ms, msVisible) {
     seconds++;
     remainder -= 10;
   }
-  return msVisible === true
-    ? `${hours > 0 ? `${hours}h ` : ""} ${minutes > 0 ? `${minutes}m ` : ""} ${
-        seconds > 0 ? `${seconds}s` : ""
-      } ${remainder}00ms`
-    : `${hours > 0 ? `${hours}h ` : ""} ${minutes > 0 ? `${minutes}m ` : ""} ${
-        seconds > 0 ? `${seconds}s` : ""
-      }`;
+  return `${hours > 0 ? `${hours}h ` : ""} ${
+    minutes > 0 ? `${minutes}m ` : ""
+  } ${seconds > 0 ? `${seconds}.${remainder}s` : ""}`;
 }
+
 function restartMouse() {
   completion.style.display = "none";
   restarted = true;
   startTime();
 }
+
 function restartKeyboard(e) {
   if (e.altKey) {
     if (e.code === "KeyR") {
@@ -70,6 +70,8 @@ function restartKeyboard(e) {
     }
   }
 }
+
 gmSelector.addEventListener("change", startTime);
 button.addEventListener("click", restartMouse);
 document.addEventListener("keydown", restartKeyboard);
+
