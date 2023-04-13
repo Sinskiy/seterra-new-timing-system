@@ -18,7 +18,7 @@ function changeTime() {
     const seconds = finalScoreTime.replace(" seconds", "s");
     const minutes = seconds.replace(" minutes", "m");
     const hours = minutes.replace(" hours", "h");
-    const final = hours.replace(", and ", " ");
+    const final = hours.replace(" and ", " ");
     finalScore.innerHTML = `${
       document.getElementById("score").innerHTML
     } ${final}`;
