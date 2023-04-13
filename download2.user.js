@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Seterra new timing system
+// @name         Seterra new timing system with showing milliseconds on top timer
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  milliseconds on the screen
@@ -8,7 +8,6 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=geoguessr.com
 // @grant        none
 // ==/UserScript==
-
 document.getElementById("timer").setAttribute("id", "overrideTimer");
 const timer = document.getElementById("overrideTimer");
 timer.innerHTML = "please, restart";
@@ -20,46 +19,62 @@ score.style.fontSize = "35px";
 let time = 0;
 let timerCount;
 let restarted = false;
-
 function startTime() {
   clearInterval(timerCount);
   completion.style.display = "none";
   time = -2;
   timerCount = setInterval(() => {
     time += 0.5;
-    timer.innerHTML = `| ${timerTime(time)}`;
+    let rounded = timerTime(time, true);
+    const roundedSplitted =
+      time < 600 ? rounded.split("s") : rounded.split("m", "s");
+    // 0s format
+    // timer.innerHTML = `| ${
+    //  roundedSplitted.length < 3
+    //    ? Math.round(roundedSplitted[0]) + "s"
+    //    : `${roundedSplitted[0]}m ${Math.round(`${roundedSplitted[2]}s`)}`
+    // }`;
+    // 0.0s format
+    timer.innerHTML = `| ${timerTime(time, true)}`;
     if (completion.style.display === "block") {
       clearInterval(timerCount);
-      score.innerHTML =
-        document.getElementById("score").innerHTML + timer.innerHTML.slice(2);
+      let officialTime = score.title.split(" ")[0];
+      let officialTimeWithMinutes = score.title.split(" ")[0];
+      let officialTimeWithMinutesSeconds = score.title.split(" ")[3];
+      score.innerHTML = `${document.getElementById("score").innerHTML} ${
+        time > 600
+          ? `${officialTimeWithMinutes}m ${officialTimeWithMinutesSeconds}s`
+          : `${officialTime}s`
+      }`;
       time = 0;
     }
   }, 50);
 }
-
-function timerTime(ms) {
-  if (ms < 0) return "0.0s";
-  const hours = parseInt(Math.floor(ms / 36000));
+function timerTime(ms, msVisible) {
+  if (msVisible === true && ms < 0) return "0.0s";
+  if (msVisible === false && ms < 0) return "0s";
   let remainder = ms % 36000;
   const minutes = parseInt(Math.floor(remainder / 600));
   remainder = remainder % 600;
   let seconds = parseInt(Math.floor(remainder / 10));
-  remainder = parseInt(Math.round(remainder % 10));
+  remainder = parseInt(Math.floor(remainder % 10));
   if (remainder === 10) {
     seconds++;
     remainder -= 10;
   }
-  return `${hours > 0 ? `${hours}h ` : ""} ${
-    minutes > 0 ? `${minutes}m ` : ""
-  } ${`${seconds}.${remainder}s`}`;
+  if (msVisible) {
+    return `${minutes > 0 ? `${minutes}m ` : ""} ${`${seconds}.${remainder}s`}`;
+  } else {
+    return `${minutes > 0 ? `${minutes}m ` : ""} ${
+      seconds > 0 ? `${seconds}s` : ""
+    }`;
+  }
 }
-
 function restartMouse() {
   completion.style.display = "none";
   restarted = true;
   startTime();
 }
-
 function restartKeyboard(e) {
   if (e.altKey) {
     if (e.code === "KeyR") {
@@ -69,7 +84,6 @@ function restartKeyboard(e) {
     }
   }
 }
-
 gmSelector.addEventListener("change", startTime);
 button.addEventListener("click", restartMouse);
 document.addEventListener("keydown", restartKeyboard);
