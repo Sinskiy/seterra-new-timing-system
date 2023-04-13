@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Seterra new timing system with showing milliseconds until yoг complete the quiz
+// @name         Seterra new timing system with showing milliseconds on top timer
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  milliseconds on the screen
