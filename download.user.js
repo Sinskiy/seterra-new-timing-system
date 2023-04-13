@@ -27,19 +27,18 @@ function startTime() {
   time = -2;
   timerCount = setInterval(() => {
     time += 0.5;
-    timer.innerHTML = `| ${timerTime(time, false)}`;
+    timer.innerHTML = `| ${timerTime(time)}`;
     if (completion.style.display === "block") {
       clearInterval(timerCount);
       score.innerHTML =
-        document.getElementById("score").innerHTML + timerTime(time, true);
+        document.getElementById("score").innerHTML + timer.innerHTML.slice(2);
       time = 0;
     }
   }, 50);
 }
 
-function timerTime(ms, msVisible) {
-  if (msVisible === false && ms < 10) return "0s";
-  else if (ms < 0) return "000ms";
+function timerTime(ms) {
+  if (ms < 0) return "0.0s";
   const hours = parseInt(Math.floor(ms / 36000));
   let remainder = ms % 36000;
   const minutes = parseInt(Math.floor(remainder / 600));
@@ -50,13 +49,9 @@ function timerTime(ms, msVisible) {
     seconds++;
     remainder -= 10;
   }
-  return msVisible === true
-    ? `${hours > 0 ? `${hours}h ` : ""} ${minutes > 0 ? `${minutes}m ` : ""} ${
-        seconds > 0 ? `${seconds}s` : ""
-      } ${remainder}00ms`
-    : `${hours > 0 ? `${hours}h ` : ""} ${minutes > 0 ? `${minutes}m ` : ""} ${
-        seconds > 0 ? `${seconds}s` : ""
-      }`;
+  return `${hours > 0 ? `${hours}h ` : ""} ${
+    minutes > 0 ? `${minutes}m ` : ""
+  } ${`${seconds}.${remainder}s`}`;
 }
 
 function restartMouse() {
@@ -78,3 +73,4 @@ function restartKeyboard(e) {
 gmSelector.addEventListener("change", startTime);
 button.addEventListener("click", restartMouse);
 document.addEventListener("keydown", restartKeyboard);
+
